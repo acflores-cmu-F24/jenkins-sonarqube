@@ -29,13 +29,27 @@ services:
       - sonarqube_logs:/opt/sonarqube/logs
     networks:
       - jenkins-sonar
+    depends_on:
+      - postgres
 
+  postgres:
+    image: postgres:13
+    container_name: sonar-postgres
+    environment:
+      - POSTGRES_USER=sonar
+      - POSTGRES_PASSWORD=sonar
+      - POSTGRES_DB=sonar
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+    networks:
+      - jenkins-sonar
 
 volumes:
   jenkins_home:
   sonarqube_data:
   sonarqube_extensions:
   sonarqube_logs:
+  postgresql_data:
 
 networks:
   jenkins-sonar:
